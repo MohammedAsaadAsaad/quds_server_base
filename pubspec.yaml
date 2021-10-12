@@ -1,0 +1,25 @@
+name: quds_server_base
+description: A simple server sample depends on quds_server
+version: 1.0.0
+publish_to: none
+# homepage: https://www.example.com
+
+environment:
+  sdk: '>=2.14.2 <3.0.0'
+
+
+dependencies:
+  quds_server:
+     git:
+       url: https://github.com/MohammedAsaadAsaad/quds_server.git
+       ref: master
+  quds_mysql:
+     git:
+       url: https://github.com/MohammedAsaadAsaad/quds_mysql.git
+       ref: master
+  shelf_hotreload: ^0.0.2
+  validators: ^3.0.0
+
+dev_dependencies:
+  lints: ^1.0.0
+  test: ^1.16.0
