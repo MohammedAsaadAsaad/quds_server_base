@@ -1,12 +1,15 @@
-import 'package:quds_server_base/imports.dart';
+import 'package:edebt_server/imports.dart';
 
 class UserBasesRepository extends DbRepository<UserBase> {
   UserBasesRepository._() : super(() => UserBase());
   static final _instance = UserBasesRepository._();
   factory UserBasesRepository() => _instance;
 
-  Future<UserBase?> getUserByUsername(String username) async =>
-      await selectFirstWhere((model) => model.username.equals(username));
+  @override
+  String get tableName => 'UserBases';
+
+  Future<UserBase?> getUserByEmail(String email) async =>
+      await selectFirstWhere((model) => model.email.equals(email));
 
   Future<String?> changeUserPassword(
       int userId, String oldPassword, String newPassword) async {
@@ -27,12 +30,18 @@ class UserBasesRepository extends DbRepository<UserBase> {
     }
   }
 
-  @override
-  String get tableName => 'UserBases';
+  Future<bool> isEmailReservedForAnother(int userId, String email) async {
+    var user = await selectFirst(where: (u) => u.email.equals(email));
+
+    if (user != null && user.id.value != userId) return true;
+
+    return false;
+  }
 }
 
 extension RequestExtensions on Request {
   Future<UserBase?> get currentUserBase async {
+    var context = this.context;
     var authDetails = context['authDetails'];
     if (authDetails != null && authDetails is JWT) {
       var id = int.tryParse((authDetails.subject ?? '').split(':').last);

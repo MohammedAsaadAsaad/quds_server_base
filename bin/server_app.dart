@@ -1,4 +1,4 @@
-import 'package:quds_server_base/imports.dart';
+import 'package:edebt_server/imports.dart';
 
 void main(List<String> arguments) async {
   await serve();

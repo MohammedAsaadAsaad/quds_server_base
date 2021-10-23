@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "quds_server_base",
+            "name": "edebt_server",
             "request": "launch",
             "type": "dart",
-            "program": "bin/quds_server_base.dart"
+            "program": "bin/server_app.dart"
         }
     ]
 }

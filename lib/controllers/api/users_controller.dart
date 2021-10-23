@@ -5,18 +5,18 @@ class UsersController extends QudsController {
     final userInfo = await req.bodyAsJson;
 
     var validationResponse = userInfo.validate({
-      'username': Required().isEmail().min(6).max(64),
+      'email': Required().min(6).max(64),
       'password': Required().min(8).max(64).matchRegex('[\\d]+')
     });
 
     if (validationResponse != null) return validationResponse;
 
-    var username = userInfo['username'];
+    var email = userInfo['email'];
     var password = userInfo['password'];
 
-    username = username.trim();
+    email = email.trim();
     var usersRepository = UserBasesRepository();
-    final user = await usersRepository.getUserByUsername(username);
+    final user = await usersRepository.getUserByEmail(email);
     if (user == null) {
       return responseApiBadRequest(message: 'Incorrect login details');
     }
@@ -28,12 +28,17 @@ class UsersController extends QudsController {
       return responseApiBadRequest(message: 'Incorrect login details');
     }
 
+    var details = await UsersDetailsRepository()
+        .selectFirstWhere((model) => model.baseId.equals(user.id.value));
 //Generate JWT and send with response
     try {
       final tokenPair = await server.tokenService!.createTokenPair(
           user.id.value!.toString(), server.tokenService!.configurations);
       return responseApiOk(
-          message: 'Login successful!', data: tokenPair.toJson());
+          message: 'Login successful!',
+          data: tokenPair.toJson()
+            ..addAll({'user_id': user.id.value})
+            ..addAll({'user_details': details!.asJsonMap}));
     } catch (e) {
       return responseApiInternalServerError(
           message: 'There was a problem logging you in. Please try again!');
@@ -44,19 +49,21 @@ class UsersController extends QudsController {
     var body = await request.bodyAsJson;
 
     var validationResponse = body.validate({
-      'username': Required().isString().min(6).max(64),
+      'email': Required().isEmail(),
       'password': Required().isString().min(8).max(64),
+      'firstname': Required().isString().min(2).max(64),
+      'familyname': Required().isString().min(2).max(64),
+      'mobile': Required(),
     });
 
     if (validationResponse != null) return validationResponse;
 
-    var username = body['username'];
+    var email = body['email'];
     var password = body['password'];
-
-    username = username.trim();
+    email = email.trim();
 
     var usersRepository = UserBasesRepository();
-    var user = await usersRepository.getUserByUsername(username);
+    var user = await usersRepository.getUserByEmail(email);
 
     if (user != null) {
       return responseApiBadRequest(message: 'User is already exists!');
@@ -66,10 +73,21 @@ class UsersController extends QudsController {
     final hashedPassword = hashPassword(password, salt);
 
     user = UserBase()
-      ..username.value = username
+      ..email.value = email
       ..password.value = hashedPassword
       ..salt.value = salt;
     await usersRepository.insertEntry(user);
+
+    var detailsRepo = UsersDetailsRepository();
+    // create user details
+    var userDetails = (await detailsRepo.createNewInstance())
+      ..baseId.value = user.id.value
+      ..email.value = body['email']
+      ..familyName.value = body['familyname']
+      ..firstName.value = body['firstname']
+      ..mobile.value = body['mobile'];
+    // ..textId.value = await detailsRepo.getNewUserId();
+    await detailsRepo.insertEntry(userDetails);
 
 //Generate JWT and send with response
     try {
@@ -78,7 +96,7 @@ class UsersController extends QudsController {
       return responseApiOk(message: 'User created successfully!', data: {
         'token': tokenPair.idToken,
         'refresh_token': tokenPair.refreshToken,
-        'username': user.username.value
+        'details': userDetails.asJsonMap
       });
     } catch (e) {
       return responseApiInternalServerError(
@@ -139,15 +157,6 @@ class UsersController extends QudsController {
     }
   }
 
-  Future<Response> myDetails(Request req) async {
-    var mydetails = await req.currentUserBase;
-    if (mydetails == null) {
-      return responseApiForbidden(message: 'Login to show your details');
-    }
-
-    return responseApiOk(data: {'username': mydetails.username.value});
-  }
-
   Future<Response> getUserDetails(Request req, dynamic userId) async {
     var caller = await req.currentUserBase;
     if (caller == null) {
@@ -165,8 +174,12 @@ class UsersController extends QudsController {
     var user = await UserBasesRepository().loadEntryById(userId);
     if (user == null) return responseApiNotFound(message: 'User is not found');
 
-    return responseApiOk(
-        data: {'user_id': user.id.value, 'username': user.username.value});
+    var details =
+        (await UsersDetailsRepository().getUserDetailsByBaseId(userId))!;
+    return responseApiOk(data: {
+      'user_id': user.id.value,
+      'details': details.asJsonMap..addAll({'userType': user.userType.value})
+    });
   }
 
   Future<Response> changeMyPassword(Request req) async {
@@ -193,5 +206,75 @@ class UsersController extends QudsController {
     if (result != null) return responseApiBadRequest(message: result);
 
     return responseApiOk(message: 'Password is changed successfully');
+  }
+
+  Future<Response> changeMyDetails(Request req) async {
+    var user = await req.currentUserBase;
+    if (user == null) {
+      return responseApiForbidden(
+          message: 'You are not authorized to perform this action');
+    }
+
+    var body = await req.bodyAsJson;
+
+    var validationResponse = body.validate({
+      'firstname': Required().isString().min(2).max(64),
+      'familyname': Required().isString().min(2).max(64),
+      'mobile': Required(),
+      'email': Required().isEmail(),
+    });
+    if (validationResponse != null) return validationResponse;
+
+    var detailsRepo = UsersDetailsRepository();
+    var userDetails = await detailsRepo.getUserDetailsByBaseId(user.id.value!);
+    userDetails ??= UserDetails()
+      ..baseId.value = user.id.value
+      ..email.value = user.email.value;
+
+    var firstName = body['firstname'];
+    var familyName = body['familyname'];
+    var mobile = body['familyname'];
+    var email = body['email'];
+    if (firstName != null) {
+      userDetails.firstName.value = firstName;
+    }
+    if (familyName != null) {
+      userDetails.familyName.value = familyName;
+    }
+    if (mobile != null) {
+      userDetails.mobile.value = mobile;
+    }
+
+    if (email != null) {
+      var usersRepo = UserBasesRepository();
+      if (await usersRepo.isEmailReservedForAnother(user.id.value!, email)) {
+        return responseApiBadRequest(
+            message: 'The email is used by another user!');
+      }
+      user.email.value = email;
+      userDetails.email.value = email;
+      await usersRepo.updateEntry(user);
+    }
+    await detailsRepo.updateEntry(userDetails);
+
+    return responseApiOk(data: {
+      'details': userDetails.asJsonMap
+        ..addAll({'userType': user.userType.value})
+    });
+  }
+
+  Future<Response> getMyDetails(Request req) async {
+    var user = await req.currentUserBase;
+    if (user == null) {
+      return responseApiForbidden(
+          message: 'You are not authorized to perform this action');
+    }
+
+    var details = (await UsersDetailsRepository()
+        .getUserDetailsByBaseId(user.id.value!))!;
+
+    return responseApiOk(data: {
+      'details': details.asJsonMap..addAll({'userType': user.userType.value})
+    });
   }
 }

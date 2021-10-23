@@ -1,4 +1,4 @@
-name: quds_server_base
+name: edebt_server
 description: A simple server sample depends on quds_server
 version: 1.0.0
 publish_to: none
@@ -17,8 +17,9 @@ dependencies:
      git:
        url: https://github.com/MohammedAsaadAsaad/quds_mysql.git
        ref: master
-  shelf_hotreload: ^0.0.2
+  shelf_hotreload: ^1.0.0
   validators: ^3.0.0
+  random_string: ^2.3.1
 
 dev_dependencies:
   lints: ^1.0.0

@@ -14,7 +14,8 @@ Future<void> serve() async {
     DbHelper.dbUser = mySqlUser!;
     DbHelper.dbPassword = mySqlPassword;
   }
-  withHotreload(() => server.start());
+  server.start();
+  // withHotreload(() => server.start());
 }
 
 late QudsServer server;

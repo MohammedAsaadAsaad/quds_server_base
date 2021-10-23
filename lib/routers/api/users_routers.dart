@@ -27,7 +27,7 @@ class UsersRouter extends QudsRouter<UsersController> {
         QudsRouterHandler(
             routePath: 'my_details',
             method: RouteMethod.post,
-            handler: controller!.myDetails),
+            handler: controller!.getMyDetails),
         QudsRouterHandler(
             routePath: 'user/<id>',
             method: RouteMethod.post,
@@ -35,6 +35,10 @@ class UsersRouter extends QudsRouter<UsersController> {
         QudsRouterHandler(
             routePath: 'change_my_password',
             method: RouteMethod.post,
-            handler: controller!.changeMyPassword)
+            handler: controller!.changeMyPassword),
+        QudsRouterHandler(
+            routePath: 'change_my_details',
+            method: RouteMethod.post,
+            handler: controller!.changeMyDetails)
       ];
 }

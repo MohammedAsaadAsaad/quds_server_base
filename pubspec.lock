@@ -7,14 +7,21 @@ packages:
       name: _fe_analyzer_shared
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "28.0.0"
+    version: "30.0.0"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.5.0"
+    version: "2.7.0"
+  archive:
+    dependency: transitive
+    description:
+      name: archive
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.6"
   args:
     dependency: transitive
     description:
@@ -29,6 +36,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.8.2"
+  async_extension:
+    dependency: transitive
+    description:
+      name: async_extension
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.9"
   boolean_selector:
     dependency: transitive
     description:
@@ -36,6 +50,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  build:
+    dependency: transitive
+    description:
+      name: build
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.1"
   charcode:
     dependency: transitive
     description:
@@ -49,7 +70,7 @@ packages:
       name: cli_util
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.4"
+    version: "0.3.5"
   collection:
     dependency: transitive
     description:
@@ -85,6 +106,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.3.2"
+  dart_spawner:
+    dependency: transitive
+    description:
+      name: dart_spawner
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.5"
+  dart_style:
+    dependency: transitive
+    description:
+      name: dart_style
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.0"
   file:
     dependency: transitive
     description:
@@ -182,7 +217,7 @@ packages:
       name: mime
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1"
   mysql1:
     dependency: transitive
     description:
@@ -225,6 +260,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.5.0"
+  project_template:
+    dependency: transitive
+    description:
+      name: project_template
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   pub_semver:
     dependency: transitive
     description:
@@ -237,26 +279,47 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: "8d86a8f255f9a1cba05a32922069411333491462"
+      resolved-ref: eb92ad27b689de730d233309b7824aab4b1c174e
       url: "https://github.com/MohammedAsaadAsaad/quds_mysql.git"
     source: git
-    version: "1.0.0+1"
+    version: "1.0.0+2"
   quds_server:
     dependency: "direct main"
     description:
       path: "."
       ref: master
-      resolved-ref: "8c4a106a8b136099edd049135a23ed6e105b071f"
+      resolved-ref: d0b58e12470ad97fcf700bc0cb340fee067c04f7
       url: "https://github.com/MohammedAsaadAsaad/quds_server.git"
     source: git
-    version: "1.0.0+2"
+    version: "1.0.0+4"
+  random_string:
+    dependency: "direct main"
+    description:
+      name: random_string
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.3.1"
   redis:
     dependency: transitive
     description:
       name: redis
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.1.0"
+  reflection_factory:
+    dependency: transitive
+    description:
+      name: reflection_factory
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.16"
+  resource_portable:
+    dependency: transitive
+    description:
+      name: resource_portable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
   shelf:
     dependency: transitive
     description:
@@ -270,7 +333,7 @@ packages:
       name: shelf_hotreload
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.2"
+    version: "1.0.0"
   shelf_packages_handler:
     dependency: transitive
     description:
@@ -361,21 +424,21 @@ packages:
       name: test
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.18.2"
+    version: "1.19.1"
   test_api:
     dependency: transitive
     description:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.5"
+    version: "0.4.6"
   test_core:
     dependency: transitive
     description:
       name: test_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.5"
+    version: "0.4.7"
   typed_data:
     dependency: transitive
     description:
@@ -432,5 +495,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.0"
+  yaml_writer:
+    dependency: transitive
+    description:
+      name: yaml_writer
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
 sdks:
   dart: ">=2.14.2 <3.0.0"
