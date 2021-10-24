@@ -1,4 +1,4 @@
-import 'package:edebt_server/imports.dart';
+import 'package:quds_server_base/imports.dart';
 
 class UserLastSeen extends DbModel {
   var userId = IntField(columnName: 'userid');
