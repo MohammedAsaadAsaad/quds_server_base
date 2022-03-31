@@ -1,4 +1,4 @@
-import 'package:quds_server_base/imports.dart';
+import '../imports.dart';
 
 class UserHunterMiddleware extends QudsMiddleware {
   UserHunterMiddleware()
@@ -7,5 +7,6 @@ class UserHunterMiddleware extends QudsMiddleware {
           if (user != null) {
             await UserLastSeenRepository().setUserLastSeen(user.id.value!);
           }
+          return null;
         }));
 }

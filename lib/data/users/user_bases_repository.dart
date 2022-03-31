@@ -1,9 +1,25 @@
-import 'package:quds_server_base/imports.dart';
+import '../../imports.dart';
 
 class UserBasesRepository extends DbRepository<UserBase> {
-  UserBasesRepository._() : super(() => UserBase());
+  UserBasesRepository._()
+      : super(() => UserBase(),
+            specialDb: UsersDatabaseConfigurations.dbName,
+            connectionSettings: UsersDatabaseConfigurations.connectionSettings);
   static final _instance = UserBasesRepository._();
   factory UserBasesRepository() => _instance;
+
+  Future<UserBase> createUser(
+      String username, String password, int? roleId) async {
+    final salt = generateSalt();
+    final hashedPassword = hashPassword(password, salt);
+    var user = UserBase()
+      ..username.value = username
+      ..password.value = hashedPassword
+      ..roleId.value = roleId
+      ..salt.value = salt;
+    await insertEntry(user);
+    return user;
+  }
 
   Future<UserBase?> getUserByUsername(String username) async =>
       await selectFirstWhere((model) => model.username.equals(username));
@@ -33,10 +49,10 @@ class UserBasesRepository extends DbRepository<UserBase> {
 
 extension RequestExtensions on Request {
   Future<UserBase?> get currentUserBase async {
-    var authDetails = context['authDetails'];
-    if (authDetails != null && authDetails is JWT) {
-      var id = int.tryParse((authDetails.subject ?? '').split(':').last);
-      if (id != null) return UserBasesRepository().loadEntryById(id);
+    var authHeader = headers['authorization'];
+    if (authHeader != null) {
+      return await UserLoginDetailsRepository().getUserByToken(authHeader);
     }
+    return null;
   }
 }

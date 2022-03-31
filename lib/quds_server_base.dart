@@ -1,4 +1,3 @@
-import 'configurations/configurations.dart';
 import 'imports.dart';
 
 Future<void> serve() async {
@@ -8,12 +7,15 @@ Future<void> serve() async {
       routers: generateRouters,
       middlewares: [UserHunterMiddleware(), ErrorsLoggerMiddleware()]);
 
-  if (server.configurations.enableAuthorization == true) {
-    DbHelper.mainDb = mySqlDb!;
-    DbHelper.port = mySqlPort!;
-    DbHelper.dbUser = mySqlUser!;
-    DbHelper.dbPassword = mySqlPassword;
-  }
+  // if (server.configurations.enableAuthorization == true) {
+  DbHelper.mainDb = mySqlDb!;
+  DbHelper.port = mySqlPort!;
+  DbHelper.dbUser = mySqlUser!;
+  DbHelper.dbPassword = mySqlPassword;
+  // }
+
+  await initializePermissions();
+
   withHotreload(() => server.start());
 }
 

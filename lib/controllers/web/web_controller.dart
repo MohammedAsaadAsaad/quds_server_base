@@ -1,4 +1,3 @@
-import '../../configurations/configurations.dart';
 import '../../imports.dart';
 
 class WebController extends QudsController {

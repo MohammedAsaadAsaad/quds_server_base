@@ -1,4 +1,4 @@
-import 'package:quds_server_base/imports.dart';
+import '../../imports.dart';
 
 class UserLastSeen extends DbModel {
   var userId = IntField(columnName: 'userid');
@@ -8,7 +8,10 @@ class UserLastSeen extends DbModel {
 }
 
 class UserLastSeenRepository extends DbRepository<UserLastSeen> {
-  UserLastSeenRepository._() : super(() => UserLastSeen());
+  UserLastSeenRepository._()
+      : super(() => UserLastSeen(),
+            specialDb: UsersDatabaseConfigurations.dbName,
+            connectionSettings: UsersDatabaseConfigurations.connectionSettings);
   static final UserLastSeenRepository _instance = UserLastSeenRepository._();
   factory UserLastSeenRepository() => _instance;
 

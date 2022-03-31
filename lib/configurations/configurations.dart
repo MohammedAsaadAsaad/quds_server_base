@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import '../imports.dart';
 
 String appName = 'Quds Server [Beta]';
@@ -10,23 +8,28 @@ bool isDebugMode = true;
 /// https://www.allkeysgenerator.com/Random/Security-Encryption-Key-Generator.aspx
 String secretKey = r'3s6v9y$B&E)H@McQfTjWmZq4t7w!z%C*';
 String serverHost = InternetAddress.anyIPv4.host;
-int get serverPort => int.parse(Platform.environment['PORT'] ?? '8080');
+int get serverPort => int.parse(Platform.environment['PORT'] ?? '6666');
 
-TokenServiceConfigurations tokenServiceConfigurations =
-    TokenServiceConfigurations(
-        secretKey: secretKey, prefix: 'token', host: 'localhost', port: 6379);
+// TokenServiceConfigurations tokenServiceConfigurations =
+//     TokenServiceConfigurations(
+//         secretKey: secretKey, prefix: 'token', host: 'localhost', port: 6379);
 
 ServerConfigurations serverConfigurations = ServerConfigurations(
     secretKey: secretKey,
     host: serverHost,
     port: serverPort,
-    enableAuthorization: true,
+    enableAuthorization: false,
     enableLogging: true,
     enableRequestsLogging: true,
-    tokenServiceConfigurations: tokenServiceConfigurations,
+    // tokenServiceConfigurations: tokenServiceConfigurations,
     isDebugMode: isDebugMode);
 
-String? mySqlDb = 'test_db';
+String? mySqlDb = 'derribni';
 String? mySqlUser = 'root';
-String? mySqlPassword;
-int? mySqlPort = 3306;
+String? mySqlPassword = '0';
+int? mySqlPort = 2020;
+
+// Users db
+// String? usersDb = 'derribni_users';
+// ConnectionSettings usersDbConnection = ConnectionSettings(
+//     port: 2020, host: 'localhost', user: 'root', password: '0');

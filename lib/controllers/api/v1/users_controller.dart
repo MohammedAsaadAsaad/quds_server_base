@@ -15,8 +15,8 @@ class UsersController extends QudsController {
     var password = userInfo['password'];
 
     username = username.trim();
-    var usersRepository = UserBasesRepository();
-    final user = await usersRepository.getUserByUsername(username);
+    var repo = UserBasesRepository();
+    final user = await repo.getUserByUsername(username);
     if (user == null) {
       return responseApiBadRequest(message: 'Incorrect login details');
     }
@@ -28,12 +28,11 @@ class UsersController extends QudsController {
       return responseApiBadRequest(message: 'Incorrect login details');
     }
 
-//Generate JWT and send with response
     try {
-      final tokenPair = await server.tokenService!.createTokenPair(
-          user.id.value!.toString(), server.tokenService!.configurations);
+      final loginDetails =
+          await UserLoginDetailsRepository().setUserNewTokens(user);
       return responseApiOk(
-          message: 'Login successful!', data: tokenPair.toJson());
+          message: 'Login successful!', data: loginDetails.toJson());
     } catch (e) {
       return responseApiInternalServerError(
           message: 'There was a problem logging you in. Please try again!');
@@ -55,29 +54,21 @@ class UsersController extends QudsController {
 
     username = username.trim();
 
-    var usersRepository = UserBasesRepository();
-    var user = await usersRepository.getUserByUsername(username);
+    var repo = UserBasesRepository();
+    var user = await repo.getUserByUsername(username);
 
     if (user != null) {
       return responseApiBadRequest(message: 'User is already exists!');
     }
 
-    final salt = generateSalt();
-    final hashedPassword = hashPassword(password, salt);
+    user = await repo.createUser(username, password, userRoleId);
 
-    user = UserBase()
-      ..username.value = username
-      ..password.value = hashedPassword
-      ..salt.value = salt;
-    await usersRepository.insertEntry(user);
-
-//Generate JWT and send with response
     try {
-      final tokenPair = await server.tokenService!.createTokenPair(
-          user.id.value!.toString(), server.tokenService!.configurations);
+      final loginDetails =
+          await UserLoginDetailsRepository().setUserNewTokens(user);
       return responseApiOk(message: 'User created successfully!', data: {
-        'token': tokenPair.idToken,
-        'refresh_token': tokenPair.refreshToken,
+        'token': loginDetails.idToken,
+        'refresh_token': loginDetails.refreshToken,
         'username': user.username.value
       });
     } catch (e) {
@@ -87,14 +78,16 @@ class UsersController extends QudsController {
   }
 
   Future<Response> logout(Request req) async {
-    var auth = req.context['authDetails'];
-    if (auth == null) {
+    var user = await req.currentUserBase;
+
+    if (user == null) {
       return responseApiForbidden(
           message: 'Not authorized to perform this operation');
     }
 
     try {
-      await server.tokenService!.removeRefreshToken((auth as JWT).jwtId!);
+      await UserLoginDetailsRepository().removeLoginByToken(
+          user.id.value!, req.headers['authorization'] ?? '');
     } catch (e) {
       return responseApiInternalServerError(
           message: 'There was an issue loggin out');
