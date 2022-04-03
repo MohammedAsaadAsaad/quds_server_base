@@ -11,4 +11,6 @@ class UserBase extends DbModel {
 
   String hashNewPassword(String password) =>
       hashPassword(password, salt.value!);
+
+  Future<bool> get isAdmin async => roleId.value == await UserRole.adminRoleId;
 }

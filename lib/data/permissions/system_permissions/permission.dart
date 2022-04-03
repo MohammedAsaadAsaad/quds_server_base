@@ -54,6 +54,7 @@ var _initials = {
   Permissions.permissions_group_edit: 'Edit Permissions Group',
   Permissions.user_role_create: 'Create User Role',
   Permissions.edit_role_create: 'Edit User Role',
+  Permissions.manage_scopes: 'Manage Training Scopes',
 };
 
 class Permissions {
@@ -67,4 +68,6 @@ class Permissions {
   static const String permissions_group_edit = 'permissions_group_edit';
   static const String user_role_create = 'user_role_create';
   static const String edit_role_create = 'edit_role_create';
+  static const String manage_scopes = 'manage_scopes';
+  static const String manage_carriers = 'manage_carriers';
 }

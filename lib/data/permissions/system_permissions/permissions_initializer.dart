@@ -1,4 +1,4 @@
-import 'package:quds_server_base/data/data.dart';
+import '../../data.dart';
 
 Future<void> initializePermissions() async {
   await UsersRolesRepository().checkInitialRoles();
