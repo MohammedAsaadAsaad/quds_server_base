@@ -1,10 +1,8 @@
 import '../../imports.dart';
 
 class TrainingScope extends SectionContent {
-  var title = StringField(columnName: 'title');
-
   @override
-  List<FieldWithValue>? getFields() => [title];
+  List<FieldWithValue>? getFields() => [];
 
   static const String contentType = 'training_scope';
 

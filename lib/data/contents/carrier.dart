@@ -1,9 +1,8 @@
 import '../../imports.dart';
 
 class Carrier extends ContentModel {
-  var title = StringField(columnName: 'title');
   @override
-  List<FieldWithValue>? getFields() => [title];
+  List<FieldWithValue>? getFields() => [];
 }
 
 class CarriersRepository extends DbRepository<Carrier> {
