@@ -20,3 +20,4 @@ export 'quds_server_base.dart';
 export 'routers/routers.dart';
 export 'utilities/utilties.dart';
 export 'initializing/initializing.dart';
+export 'utilities/utilities.dart';

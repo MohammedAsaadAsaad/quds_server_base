@@ -1,4 +1,5 @@
 import '../../imports.dart';
+import 'package:quds_server_base/imports.dart';
 
 extension JsonEncoding on DbModel {
   Map<String, dynamic> toJsonMap({List<FieldWithValue>? ignores}) {

@@ -1,4 +1,4 @@
-import 'package:quds_server_base/imports.dart';
+import '../../../imports.dart';
 
 class PermissionsGroup extends DbModel {
   var name = StringField(columnName: 'name');
