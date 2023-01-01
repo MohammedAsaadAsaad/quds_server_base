@@ -14,9 +14,10 @@ Future<void> serve() async {
   DbHelper.dbPassword = mySqlPassword;
   // }
 
-  await initializePermissions();
+  await initializeApp();
 
-  withHotreload(() => server.start());
+  server.start();
+  // withHotreload(() => server.start());
 }
 
 late QudsServer server;

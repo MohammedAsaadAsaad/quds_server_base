@@ -1,6 +1,6 @@
 import '../imports.dart';
 
-String appName = 'Quds Server [Beta]';
+String appName = 'eTeller Admin Server';
 bool isDebugMode = true;
 
 ///Should generate  a unique secret key and put it here
@@ -8,7 +8,7 @@ bool isDebugMode = true;
 /// https://www.allkeysgenerator.com/Random/Security-Encryption-Key-Generator.aspx
 String secretKey = r'3s6v9y$B&E)H@McQfTjWmZq4t7w!z%C*';
 String serverHost = InternetAddress.anyIPv4.host;
-int get serverPort => int.parse(Platform.environment['PORT'] ?? '6666');
+int get serverPort => int.parse(Platform.environment['PORT'] ?? '1010');
 
 // TokenServiceConfigurations tokenServiceConfigurations =
 //     TokenServiceConfigurations(
@@ -24,7 +24,7 @@ ServerConfigurations serverConfigurations = ServerConfigurations(
     // tokenServiceConfigurations: tokenServiceConfigurations,
     isDebugMode: isDebugMode);
 
-String? mySqlDb = 'derribni';
+String? mySqlDb = 'eteller_admin';
 String? mySqlUser = 'root';
 String? mySqlPassword = '0';
 int? mySqlPort = 2020;

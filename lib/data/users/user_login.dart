@@ -7,7 +7,8 @@ class UserLoginDetails extends DbModel {
   var refreshToken = StringField(columnName: 'refresh_token');
 
   @override
-  List<FieldWithValue>? getFields() => [token, refreshToken];
+  List<FieldWithValue>? getFields() =>
+      [token, refreshToken, userId, loginDateTime];
 }
 
 class UserLoginDetailsRepository extends DbRepository<UserLoginDetails> {
@@ -27,8 +28,9 @@ class UserLoginDetailsRepository extends DbRepository<UserLoginDetails> {
 
     UserLoginDetails loginDetails = UserLoginDetails()
       ..token.value = token
+      ..userId.value = user.id.value
       ..refreshToken.value = refreshToken
-      ..loginDateTime.value = DateTime.now();
+      ..loginDateTime.value = DateTime.now().toUtc();
     await insertEntry(loginDetails);
 
     return TokenPair(token, refreshToken);
